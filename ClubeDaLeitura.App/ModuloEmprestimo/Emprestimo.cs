@@ -11,11 +11,19 @@ namespace ClubeDaLeitura.App.ModuloEmprestimo
         private DateTime data;
         private string status;
 
-        public Emprestimo(Amigo amigo, Revista revista, DateTime data)
+        public Emprestimo(Amigo amigo, Revista revista, DateTime data, string status)
         {
             this.amigo = amigo;
             this.revista = revista;
             this.data = data;
+            this.status = status;
+        }
+
+        public override string Validar()
+        {
+            string erros = "";
+
+            return erros;
         }
     }
 }

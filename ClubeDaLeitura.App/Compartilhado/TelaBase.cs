@@ -1,14 +1,16 @@
-﻿namespace ClubeDaLeitura.App.Compartilhado
+﻿using ClubeDaLeitura.App.ModuloAmigo;
+
+namespace ClubeDaLeitura.App.Compartilhado
 {
     public abstract class TelaBase
     {
         private string nomeEntidade;
         private BaseRepositorio repositorio;
 
-        protected TelaBase(string nomeEntidade, BaseRepositorio repositorio)
+        protected TelaBase(string nomeEntidade, BaseRepositorio repository)
         {
             this.nomeEntidade = nomeEntidade;
-            this.repositorio = repositorio;
+            this.repositorio = repository;
         }
 
         public void Menu()
@@ -44,7 +46,7 @@
                         break;
 
                     case "4":
-                        DeletarRegistro();
+                        ExcluirRegistro();
                         break;
 
                     case "0":
@@ -115,7 +117,7 @@
 
         protected abstract EntidadeBase ObterDados();
 
-        public void DeletarRegistro()
+        public virtual void ExcluirRegistro()
         {
             Console.Clear();
             Console.WriteLine($"Exclusão de {nomeEntidade}");

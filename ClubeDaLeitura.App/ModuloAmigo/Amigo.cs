@@ -1,12 +1,16 @@
 ﻿using ClubeDaLeitura.App.Compartilhado;
+using ClubeDaLeitura.App.ModuloEmprestimo;
+using ClubeDaLeitura.App.ModuloRevista;
+using Microsoft.Win32;
 
 namespace ClubeDaLeitura.App.ModuloAmigo
 {
     public class Amigo : EntidadeBase
     {
-        private string nome;
-        private string responsavel;
-        private string telefone;
+        public string nome;
+        public string responsavel;
+        public string telefone;
+        private List<Emprestimo> emprestimos = new List<Emprestimo>();
 
         public Amigo(string nome, string responsavel, string telefone)
         {
@@ -21,22 +25,81 @@ namespace ClubeDaLeitura.App.ModuloAmigo
 
             if (string.IsNullOrWhiteSpace(nome))
                 erros += "O nome é obrigatório!\n";
-            else if (nome.Length < 2)
-                erros += "O nome deve conter mais que 1 caractere!\n";
+            else if (nome.Length < 3 || nome.Length > 100)
+                erros += "O nome deve conter entre 3 a 100 caracteres!\n";
 
             if (string.IsNullOrWhiteSpace(responsavel))
                 erros += "O nome do rensponsável é obrigatório!\n";
-            else if (nome.Length < 2)
-                erros += "O nome deve conter mais que 1 caractere!\n";
+            else if (responsavel.Length < 3 || responsavel.Length > 100)
+                erros += "O nome deve conter entre 3 a 100 caracteres!\n";
 
             if (string.IsNullOrWhiteSpace(telefone))
                 erros += "O telefone é obrigatório!\n";
-            else if (telefone.Length < 9)
-                erros += "O telefone deve conter no mínimo 9 caracteres!\n";
+            else if (!ValidarTelefone(telefone))
+                erros += "O telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX!\n";
+
+            if (VerificarAmigoExistente(nome, telefone) == true)
+                erros += "Nome ou telefone já existem!\n";
 
             return erros;
         }
 
-        private void ObterEmprestimos();
+        public bool VerificarAmigoExistente(string nome, string telefone)
+        {
+            List<EntidadeBase> registros = new List<EntidadeBase>();
+            foreach (Amigo amigo in registros)
+            {
+                if (amigo.nome == nome && amigo.telefone == telefone)
+                    return true;
+            }
+            return false;
+        }
+
+        public override void AtualizarRegistro(EntidadeBase registroAtualizado)
+        {
+            Amigo amigoAtualizado = (Amigo)registroAtualizado;
+
+            nome = amigoAtualizado.nome;
+            responsavel = amigoAtualizado.responsavel;
+            telefone = amigoAtualizado.telefone;
+        }
+
+        public string ObterEmprestimo()
+        {
+            if (emprestimos.Count == 0 || emprestimos == null)
+                Console.WriteLine("Nenhum empréstimo registrado para este amigo!\n");
+            return null;
+
+            string dadosEmprestimos = "Empréstimos:\n";
+            foreach (var emprestimo in emprestimos)
+            {
+                Console.WriteLine(emprestimo.ToString());
+            }
+
+            return dadosEmprestimos;
+        }
+
+        public bool ExistemEmprestimosParaAmigo(int idAmigo)
+        {
+            foreach (Emprestimo emprestimo in emprestimos)
+            {
+                if (emprestimo.amigo != null && emprestimo.amigo.id == idAmigo)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ValidarTelefone(string telefone)
+        {
+            var regex = new System.Text.RegularExpressions.Regex(@"^\(\d{2}\) \d{4,5}-\d{4}$");
+            return regex.IsMatch(telefone);
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {id} | Nome: {nome} | Responsável: {responsavel} | Telefone: {telefone}";
+        }
     }
 }

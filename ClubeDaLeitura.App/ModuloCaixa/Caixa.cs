@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeitura.App.Compartilhado;
+using ClubeDaLeitura.App.ModuloAmigo;
 
 namespace ClubeDaLeitura.App.ModuloCaixa
 {
@@ -25,13 +26,22 @@ namespace ClubeDaLeitura.App.ModuloCaixa
                 erros += "O telefone é obrigatório!\n";
             else if (cor < 3)
 
-                erros += "O telefone deve conter no mínimo 9 caracteres!\n";
+                erros += "A cor deve conter no mínimo 3 caracteres!\n";
 
             return erros;
         }
 
-        public void AdicionarRevista();
+        public override void AtualizarRegistro(EntidadeBase registroAtualizado)
+        {
+            Caixa caixaAtualizada = (Caixa)registroAtualizado;
 
-        public void RemoverRevista();
+            etiqueta = caixaAtualizada.etiqueta;
+            cor = caixaAtualizada.cor;
+            diasEmprestimo = caixaAtualizada.diasEmprestimo;
+        }
+
+        /* public void AdicionarRevista();
+
+         public void RemoverRevista();*/
     }
 }

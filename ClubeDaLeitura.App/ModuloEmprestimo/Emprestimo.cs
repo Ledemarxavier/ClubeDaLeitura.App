@@ -6,9 +6,9 @@ namespace ClubeDaLeitura.App.ModuloEmprestimo
 {
     public class Emprestimo : EntidadeBase
     {
-        private Amigo amigo;
-        private Revista revista;
-        private DateTime data;
+        public Amigo amigo;
+        public Revista revista;
+        public DateTime data;
         private string status;
 
         public Emprestimo(Amigo amigo, Revista revista, DateTime data, string status)
@@ -17,6 +17,20 @@ namespace ClubeDaLeitura.App.ModuloEmprestimo
             this.revista = revista;
             this.data = data;
             this.status = status;
+        }
+
+        public override void AtualizarRegistro(EntidadeBase registroAtualizado)
+        {
+            Emprestimo emprestimoAtualizado = (Emprestimo)registroAtualizado;
+
+            amigo = emprestimoAtualizado.amigo;
+            revista = emprestimoAtualizado.revista;
+            data = emprestimoAtualizado.data;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {id} | Nome: {amigo} | Resvista: {revista} | Data: {data} | Status: {status}";
         }
 
         public override string Validar()

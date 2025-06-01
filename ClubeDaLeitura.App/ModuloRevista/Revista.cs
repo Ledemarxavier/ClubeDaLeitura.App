@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeitura.App.Compartilhado;
+using ClubeDaLeitura.App.ModuloAmigo;
 using ClubeDaLeitura.App.ModuloCaixa;
 using ClubeDaLeitura.App.ModuloEmprestimo;
 
@@ -6,7 +7,7 @@ namespace ClubeDaLeitura.App.ModuloRevista
 {
     public class Revista : EntidadeBase
     {
-        private string titulo;
+        public string titulo;
         private int numeroEdicao;
         private int anoPublicacao;
         private string statusEmprestimo;
@@ -19,6 +20,22 @@ namespace ClubeDaLeitura.App.ModuloRevista
             this.anoPublicacao = anoPublicacao;
             this.statusEmprestimo = statusEmprestimo;
             this.caixa = caixa;
+        }
+
+        public override string Validar()
+        {
+            return "";
+        }
+
+        public override void AtualizarRegistro(EntidadeBase registroAtualizado)
+        {
+            Revista revistaAtualizada = (Revista)registroAtualizado;
+
+            titulo = revistaAtualizada.titulo;
+            numeroEdicao = revistaAtualizada.numeroEdicao;
+            anoPublicacao = revistaAtualizada.anoPublicacao;
+            statusEmprestimo = revistaAtualizada.statusEmprestimo;
+            caixa = revistaAtualizada.caixa;
         }
     }
 }

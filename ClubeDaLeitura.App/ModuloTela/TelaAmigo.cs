@@ -107,5 +107,55 @@ namespace ClubeDaLeitura.App.ModuloTelas
 
             base.ExcluirRegistro();
         }
+
+        public override void Menu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Gerenciamento de amigos");
+                Console.WriteLine("-----------------------------");
+                Console.WriteLine($"1. Cadastrar amigo");
+                Console.WriteLine($"2. Listar amigos");
+                Console.WriteLine($"3. Editar amigo");
+                Console.WriteLine($"4. Excluir amigo");
+                Console.WriteLine($"5. Visualizar empréstimos do amigo");
+                Console.WriteLine("0. Voltar");
+                Console.Write("Opção: ");
+
+                string opcao = Console.ReadLine();
+
+                switch (opcao)
+                {
+                    case "1":
+                        CadastrarRegistro();
+                        break;
+
+                    case "2":
+                        ListarRegistros();
+                        break;
+
+                    case "3":
+                        AtualizarRegistro();
+                        break;
+
+                    case "4":
+                        ExcluirRegistro();
+                        break;
+
+                    case "5":
+                        VisualizarEmprestimosAmigo();
+                        break;
+
+                    case "0":
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        Console.ReadLine();
+                        break;
+                }
+            }
+        }
     }
 }

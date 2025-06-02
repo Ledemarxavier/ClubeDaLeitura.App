@@ -13,7 +13,7 @@ namespace ClubeDaLeitura.App.Compartilhado
             this.repositorio = repositorio;
         }
 
-        public void Menu()
+        public virtual void Menu()
         {
             while (true)
             {

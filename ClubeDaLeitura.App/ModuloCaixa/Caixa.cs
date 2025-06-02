@@ -1,15 +1,16 @@
 ﻿using ClubeDaLeitura.App.Compartilhado;
-using ClubeDaLeitura.App.ModuloAmigo;
+using ClubeDaLeitura.App.ModuloRevista;
 
 namespace ClubeDaLeitura.App.ModuloCaixa
 {
     public class Caixa : EntidadeBase
     {
-        private string etiqueta;
-        private int cor;
+        public string etiqueta;
+        public string cor;
         public int diasEmprestimo;
+        public List<Revista> revistas = new List<Revista>();
 
-        public Caixa(string etiqueta, int cor, int diasEmprestimo)
+        public Caixa(string etiqueta, string cor, int diasEmprestimo)
         {
             this.etiqueta = etiqueta;
             this.cor = cor;
@@ -22,11 +23,14 @@ namespace ClubeDaLeitura.App.ModuloCaixa
 
             if (string.IsNullOrWhiteSpace(etiqueta))
                 erros += "A etiqueta é obrigatória!\n";
-            if (cor == default)
-                erros += "O telefone é obrigatório!\n";
-            else if (cor < 3)
+            else if (etiqueta.Length > 50)
+                erros += "A etiqueta deve ter no máximo 50 caracteres!\n";
 
-                erros += "A cor deve conter no mínimo 3 caracteres!\n";
+            if (string.IsNullOrWhiteSpace(cor))
+                erros += "A cor é obrigatória!\n";
+
+            if (diasEmprestimo >= 8)
+                erros += "O nùmero de dias deve ser maior que 7!\n";
 
             return erros;
         }
@@ -40,8 +44,21 @@ namespace ClubeDaLeitura.App.ModuloCaixa
             diasEmprestimo = caixaAtualizada.diasEmprestimo;
         }
 
-        /* public void AdicionarRevista();
+        public bool ExistemEmprestimosParaCaixa(int idCaixa)
+        {
+            foreach (Revista revista in revistas)
+            {
+                if (revista.caixa != null && revista.caixa.id == idCaixa)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-         public void RemoverRevista();*/
+        public override string ToString()
+        {
+            return $"ID: {id} | Etiqueta: {etiqueta} | Cor: {cor} | Dias Empréstimo: {diasEmprestimo}";
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using ClubeDaLeitura.App.ModuloAmigo;
 using ClubeDaLeitura.App.ModuloEmprestimo;
+using ClubeDaLeitura.App.ModuloRevista;
+using ClubeDaLeitura.App.ModuloTela;
 using ClubeDaLeitura.App.ModuloTelas;
 
 namespace ClubeDaLeitura.App.Compartilhado
@@ -8,11 +10,12 @@ namespace ClubeDaLeitura.App.Compartilhado
     {
         private AmigoRepositorio amigoRepositorio = new();
         private EmprestimoRepositorio emprestimoRepositorio = new();
+        private RevistaRepositorio revistaRepositorio = new();
 
         public void menuPrincipal()
         {
             TelaAmigo telaAmigo = new TelaAmigo(amigoRepositorio, emprestimoRepositorio);
-
+            TelaEmprestimo telaEmprestimo = new TelaEmprestimo(emprestimoRepositorio, revistaRepositorio, amigoRepositorio);
             while (true)
             {
                 Console.Clear();
@@ -21,7 +24,7 @@ namespace ClubeDaLeitura.App.Compartilhado
                 Console.WriteLine("1. Gerenciar Amigos");
                 Console.WriteLine("2. Gerenciar Caixas");
                 Console.WriteLine("3. Gerenciar Emprestimos");
-                Console.WriteLine("3. Gerenciar Revistas");
+                Console.WriteLine("4. Gerenciar Revistas");
                 Console.WriteLine("0. Sair");
                 Console.Write("Opção: ");
 
@@ -38,7 +41,7 @@ namespace ClubeDaLeitura.App.Compartilhado
                         break;
 
                     case "3":
-
+                        telaEmprestimo.Menu();
                         break;
 
                     case "0":

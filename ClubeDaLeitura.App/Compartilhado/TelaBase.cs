@@ -7,10 +7,10 @@ namespace ClubeDaLeitura.App.Compartilhado
         private string nomeEntidade;
         private BaseRepositorio repositorio;
 
-        protected TelaBase(string nomeEntidade, BaseRepositorio repository)
+        protected TelaBase(string nomeEntidade, BaseRepositorio repositorio)
         {
             this.nomeEntidade = nomeEntidade;
-            this.repositorio = repository;
+            this.repositorio = repositorio;
         }
 
         public void Menu()

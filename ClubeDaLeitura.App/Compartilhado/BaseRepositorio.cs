@@ -1,6 +1,4 @@
-﻿using ClubeDaLeitura.App.ModuloEmprestimo;
-
-namespace ClubeDaLeitura.App.Compartilhado
+﻿namespace ClubeDaLeitura.App.Compartilhado
 {
     public class BaseRepositorio
     {

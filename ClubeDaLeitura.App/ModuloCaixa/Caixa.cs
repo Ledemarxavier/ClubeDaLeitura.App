@@ -7,9 +7,9 @@ namespace ClubeDaLeitura.App.ModuloCaixa
     {
         private string etiqueta;
         private int cor;
-        private DateTime diasEmprestimo;
+        public int diasEmprestimo;
 
-        public Caixa(string etiqueta, int cor, DateTime diasEmprestimo)
+        public Caixa(string etiqueta, int cor, int diasEmprestimo)
         {
             this.etiqueta = etiqueta;
             this.cor = cor;
@@ -22,7 +22,7 @@ namespace ClubeDaLeitura.App.ModuloCaixa
 
             if (string.IsNullOrWhiteSpace(etiqueta))
                 erros += "A etiqueta é obrigatória!\n";
-            if (cor == default(int))
+            if (cor == default)
                 erros += "O telefone é obrigatório!\n";
             else if (cor < 3)
 

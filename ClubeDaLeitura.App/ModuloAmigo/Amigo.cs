@@ -10,7 +10,7 @@ namespace ClubeDaLeitura.App.ModuloAmigo
         public string nome;
         public string responsavel;
         public string telefone;
-        private List<Emprestimo> emprestimos = new List<Emprestimo>();
+        public List<Emprestimo> emprestimos = new List<Emprestimo>();
 
         public Amigo(string nome, string responsavel, string telefone)
         {
@@ -38,7 +38,7 @@ namespace ClubeDaLeitura.App.ModuloAmigo
             else if (!ValidarTelefone(telefone))
                 erros += "O telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX!\n";
 
-            if (VerificarAmigoExistente(nome, telefone) == true)
+            if (!VerificarAmigoExistente(nome, telefone))
                 erros += "Nome ou telefone já existem!\n";
 
             return erros;
@@ -46,8 +46,8 @@ namespace ClubeDaLeitura.App.ModuloAmigo
 
         public bool VerificarAmigoExistente(string nome, string telefone)
         {
-            List<EntidadeBase> registros = new List<EntidadeBase>();
-            foreach (Amigo amigo in registros)
+            List<EntidadeBase> amigos = new List<EntidadeBase>();
+            foreach (Amigo amigo in amigos)
             {
                 if (amigo.nome == nome && amigo.telefone == telefone)
                     return true;
@@ -66,10 +66,6 @@ namespace ClubeDaLeitura.App.ModuloAmigo
 
         public string ObterEmprestimo()
         {
-            if (emprestimos.Count == 0 || emprestimos == null)
-                Console.WriteLine("Nenhum empréstimo registrado para este amigo!\n");
-            return null;
-
             string dadosEmprestimos = "Empréstimos:\n";
             foreach (var emprestimo in emprestimos)
             {

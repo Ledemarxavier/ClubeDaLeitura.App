@@ -69,22 +69,27 @@ namespace ClubeDaLeitura.App.ModuloTelas
 
             Amigo amigoSelecionado = (Amigo)emprestimoRepositorio.SelecionarRegistroPorId(idAmigo);
 
-            Console.WriteLine($"\nEmpréstimos do amigo: {amigoSelecionado.nome}");
+            if (amigoSelecionado.emprestimos.Count == 0)
+            {
+                Console.WriteLine("Este amigo não possui emprestimos!");
+            }
+            else
+                Console.WriteLine($"\nEmpréstimos do amigo: {amigoSelecionado.nome}");
 
             Console.WriteLine(amigoSelecionado.ObterEmprestimo());
-            return true;
 
             Console.ReadLine();
+            return true;
         }
 
-        public override void ExcluirRegistro()
+        public override bool ExcluirRegistro()
         {
             Console.Clear();
             Console.WriteLine($"Exclusão de amigo");
             Console.WriteLine("-----------------------");
 
             if (!ListarRegistros())
-                return;
+                return false;
 
             Console.Write($"\nDigite o ID do amigo a ser excluído: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
@@ -95,17 +100,18 @@ namespace ClubeDaLeitura.App.ModuloTelas
             {
                 Console.WriteLine("Amigo não encontrado!");
                 Console.ReadLine();
-                return;
+                return false;
             }
 
             if (amigo.ExistemEmprestimosParaAmigo(idSelecionado))
             {
                 Console.WriteLine("Não é possível excluir um amigo com empréstimos vinculados!");
                 Console.ReadLine();
-                return;
+                return false;
             }
 
             base.ExcluirRegistro();
+            return true;
         }
 
         public override void Menu()

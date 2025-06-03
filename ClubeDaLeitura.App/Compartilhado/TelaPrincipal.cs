@@ -19,6 +19,7 @@ namespace ClubeDaLeitura.App.Compartilhado
             TelaAmigo telaAmigo = new TelaAmigo(amigoRepositorio, emprestimoRepositorio);
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(emprestimoRepositorio, revistaRepositorio, amigoRepositorio);
             TelaCaixa telaCaixa = new TelaCaixa(caixaRepositorio);
+            TelaRevista telaRevista = new TelaRevista(revistaRepositorio, caixaRepositorio);
             while (true)
             {
                 Console.Clear();
@@ -45,6 +46,10 @@ namespace ClubeDaLeitura.App.Compartilhado
 
                     case "3":
                         telaEmprestimo.Menu();
+                        break;
+
+                    case "4":
+                        telaRevista.Menu();
                         break;
 
                     case "0":

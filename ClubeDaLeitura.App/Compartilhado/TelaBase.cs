@@ -117,7 +117,7 @@ namespace ClubeDaLeitura.App.Compartilhado
 
         protected abstract EntidadeBase ObterDados();
 
-        public virtual void ExcluirRegistro()
+        public virtual bool ExcluirRegistro()
         {
             Console.Clear();
             Console.WriteLine($"Exclusão de {nomeEntidade}");
@@ -125,7 +125,7 @@ namespace ClubeDaLeitura.App.Compartilhado
 
             if (!ListarRegistros())
 
-                return;
+                return false;
 
             Console.Write($"\nDigite o ID do {nomeEntidade} a ser excluído: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
@@ -135,6 +135,7 @@ namespace ClubeDaLeitura.App.Compartilhado
             Console.WriteLine($"\n{nomeEntidade} excluído com sucesso!");
 
             Console.ReadLine();
+            return true;
         }
     }
 }

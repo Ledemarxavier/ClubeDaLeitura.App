@@ -55,14 +55,14 @@ namespace ClubeDaLeitura.App.ModuloCaixa
             return true;
         }
 
-        public override void ExcluirRegistro()
+        public override bool ExcluirRegistro()
         {
             Console.Clear();
             Console.WriteLine($"Exclusão de caixa");
             Console.WriteLine("-----------------------");
 
             if (!ListarRegistros())
-                return;
+                return false;
 
             Console.Write($"\nDigite o ID da caixa a ser excluída: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
@@ -73,17 +73,18 @@ namespace ClubeDaLeitura.App.ModuloCaixa
             {
                 Console.WriteLine("Caixa não encontrada!");
                 Console.ReadLine();
-                return;
+                return false;
             }
 
             if (caixa.ExistemEmprestimosParaCaixa(idSelecionado))
             {
                 Console.WriteLine("Não é possível excluir uma caixa com empréstimos vinculados!");
                 Console.ReadLine();
-                return;
+                return false;
             }
 
             base.ExcluirRegistro();
+            return true;
         }
     }
 }

@@ -8,7 +8,6 @@ namespace ClubeDaLeitura.App.ModuloCaixa
         public string etiqueta;
         public string cor;
         public int diasEmprestimo;
-        public List<Revista> revistas = new List<Revista>();
 
         public Caixa(string etiqueta, string cor, int diasEmprestimo)
         {
@@ -46,6 +45,7 @@ namespace ClubeDaLeitura.App.ModuloCaixa
 
         public bool ExistemEmprestimosParaCaixa(int idCaixa)
         {
+            List<EntidadeBase> revistas = new List<EntidadeBase>();
             foreach (Revista revista in revistas)
             {
                 if (revista.caixa != null && revista.caixa.id == idCaixa)

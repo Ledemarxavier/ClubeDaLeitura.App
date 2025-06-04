@@ -83,7 +83,7 @@ namespace ClubeDaLeitura.App.ModuloCaixa
                 return false;
             }
 
-            base.ExcluirRegistro();
+            caixaRepositorio.ExcluirRegistro(idSelecionado);
             return true;
         }
     }

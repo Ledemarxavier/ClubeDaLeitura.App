@@ -1,6 +1,5 @@
 ﻿using ClubeDaLeitura.App.Compartilhado;
 using ClubeDaLeitura.App.ModuloEmprestimo;
-using ClubeDaLeitura.App.ModuloRevista;
 using Microsoft.Win32;
 
 namespace ClubeDaLeitura.App.ModuloAmigo
@@ -38,21 +37,7 @@ namespace ClubeDaLeitura.App.ModuloAmigo
             else if (!ValidarTelefone(telefone))
                 erros += "O telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX!\n";
 
-            if (!VerificarAmigoExistente(nome, telefone))
-                erros += "Nome ou telefone já existem!\n";
-
             return erros;
-        }
-
-        public bool VerificarAmigoExistente(string nome, string telefone)
-        {
-            List<EntidadeBase> amigos = new List<EntidadeBase>();
-            foreach (Amigo amigo in amigos)
-            {
-                if (amigo.nome == nome && amigo.telefone == telefone)
-                    return true;
-            }
-            return false;
         }
 
         public override void AtualizarRegistro(EntidadeBase registroAtualizado)

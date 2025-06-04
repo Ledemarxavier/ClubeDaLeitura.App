@@ -57,7 +57,28 @@ namespace ClubeDaLeitura.App.ModuloTelas
                 return null;
             }
 
+            if (VerificarRevistaExistente(titulo, numeroEdicao))
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Já existe uma revista com este título e número de edição cadastrado!");
+                Console.ResetColor();
+                Console.ReadLine();
+                return null;
+            }
+
             return new Revista(titulo, numeroEdicao, anoPublicacao, caixaSelecionada);
+        }
+
+        public bool VerificarRevistaExistente(string titulo, int numeroEdicao)
+        {
+            List<EntidadeBase> revistas = revistaRepositorio.SelecionarRegistros();
+            foreach (Revista revista in revistas)
+            {
+                if (revista.titulo == titulo && revista.numeroEdicao == numeroEdicao)
+                    return true;
+            }
+            return false;
         }
 
         public override bool ListarRegistros()
@@ -109,7 +130,7 @@ namespace ClubeDaLeitura.App.ModuloTelas
                 return false;
             }
 
-            base.ExcluirRegistro();
+            revistaRepositorio.ExcluirRegistro(idSelecionado);
             return true;
         }
     }

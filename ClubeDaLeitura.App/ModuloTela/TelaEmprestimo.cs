@@ -59,7 +59,7 @@ namespace ClubeDaLeitura.App.ModuloTela
             Console.WriteLine("\nSelecione uma revista disponível:");
             List<Revista> revistasDisponiveis = revistaRepositorio.SelecionarRevistasDisponiveis();
 
-            if (revistasDisponiveis.Count == 0)
+            if (revistasDisponiveis.Count < 0)
             {
                 Console.WriteLine("Nenhuma revista disponível!");
                 Console.ReadLine();

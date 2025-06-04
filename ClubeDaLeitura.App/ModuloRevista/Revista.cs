@@ -48,9 +48,6 @@ namespace ClubeDaLeitura.App.ModuloRevista
             if (caixa == null)
                 erros += "A caixa é obrigatória!\n";
 
-            if (VerificarRevistaExistente(titulo, numeroEdicao))
-                erros += "Já existe uma revista com este título e edição!\n";
-
             return erros;
         }
 
@@ -62,17 +59,6 @@ namespace ClubeDaLeitura.App.ModuloRevista
             numeroEdicao = revistaAtualizada.numeroEdicao;
             anoPublicacao = revistaAtualizada.anoPublicacao;
             caixa = revistaAtualizada.caixa;
-        }
-
-        public bool VerificarRevistaExistente(string titulo, int numeroEdicao)
-        {
-            List<EntidadeBase> revistas = new List<EntidadeBase>();
-            foreach (Revista revista in revistas)
-            {
-                if (revista.titulo == titulo && revista.numeroEdicao == numeroEdicao)
-                    return true;
-            }
-            return false;
         }
 
         public void Emprestar()

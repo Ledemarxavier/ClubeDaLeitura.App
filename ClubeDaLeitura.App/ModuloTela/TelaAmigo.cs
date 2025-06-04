@@ -1,6 +1,7 @@
 ﻿using ClubeDaLeitura.App.Compartilhado;
 using ClubeDaLeitura.App.ModuloAmigo;
 using ClubeDaLeitura.App.ModuloEmprestimo;
+using Microsoft.Win32;
 
 namespace ClubeDaLeitura.App.ModuloTelas
 {
@@ -27,7 +28,28 @@ namespace ClubeDaLeitura.App.ModuloTelas
             Console.Write("Digite o telefone no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX: ");
             string telefone = Console.ReadLine();
 
+            if (VerificarAmigoExistente(nome, telefone))
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Já existe um amigo com este nome e telefone cadastrado!");
+                Console.ResetColor();
+                Console.ReadLine();
+                return null;
+            }
+
             return new Amigo(nome, responsavel, telefone);
+        }
+
+        public bool VerificarAmigoExistente(string nome, string telefone)
+        {
+            List<EntidadeBase> amigos = amigoRepositorio.SelecionarRegistros();
+            foreach (Amigo amigo in amigos)
+            {
+                if (amigo.nome == nome && amigo.telefone == telefone)
+                    return true;
+            }
+            return false;
         }
 
         public override bool ListarRegistros()
@@ -61,22 +83,39 @@ namespace ClubeDaLeitura.App.ModuloTelas
             Console.WriteLine("Visualização de Empréstimos por Amigo");
             Console.WriteLine("-------------------------------------");
 
-            if (!ListarRegistros())
+            List<EntidadeBase> amigos = amigoRepositorio.SelecionarRegistros();
+
+            if (amigos.Count == 0)
+            {
+                Console.WriteLine("Nenhum amigo cadastrado!");
+                Console.ReadLine();
                 return false;
+            }
+
+            foreach (var amigo in amigos)
+            {
+                Console.WriteLine(amigo.ToString());
+            }
 
             Console.Write("\nDigite o ID do amigo para ver os empréstimos: ");
             int idAmigo = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoSelecionado = (Amigo)emprestimoRepositorio.SelecionarRegistroPorId(idAmigo);
+            Amigo amigoSelecionado = (Amigo)amigoRepositorio.SelecionarRegistroPorId(idAmigo);
+
+            if (amigoSelecionado == null)
+            {
+                Console.WriteLine("Amigo não encontrado!");
+                Console.ReadLine();
+                return false;
+            }
+
+            Console.WriteLine($"\nEmpréstimos do amigo: {amigoSelecionado.nome}");
 
             if (amigoSelecionado.emprestimos.Count == 0)
-            {
-                Console.WriteLine("Este amigo não possui emprestimos!");
-            }
+                Console.WriteLine("Nenhum empréstimo registrado.");
             else
-                Console.WriteLine($"\nEmpréstimos do amigo: {amigoSelecionado.nome}");
-
-            Console.WriteLine(amigoSelecionado.ObterEmprestimo());
+                foreach (var emprestimo in amigoSelecionado.emprestimos)
+                    Console.WriteLine(emprestimo.ToString());
 
             Console.ReadLine();
             return true;
@@ -110,7 +149,7 @@ namespace ClubeDaLeitura.App.ModuloTelas
                 return false;
             }
 
-            base.ExcluirRegistro();
+            amigoRepositorio.ExcluirRegistro(idSelecionado);
             return true;
         }
 

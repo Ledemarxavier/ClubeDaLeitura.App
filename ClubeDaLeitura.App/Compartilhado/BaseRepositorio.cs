@@ -2,7 +2,7 @@
 {
     public class BaseRepositorio
     {
-        private List<EntidadeBase> registros = new List<EntidadeBase>();
+        public List<EntidadeBase> registros = new List<EntidadeBase>();
         private int contadorRegistros = 0;
 
         public void CadastrarRegistro(EntidadeBase novoRegistro)

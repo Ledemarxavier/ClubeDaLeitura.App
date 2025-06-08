@@ -1,16 +1,19 @@
 ﻿using ClubeDaLeitura.App.Compartilhado;
+using ClubeDaLeitura.App.ModuloEmprestimo;
+using Microsoft.Win32;
 
 namespace ClubeDaLeitura.App.ModuloRevista
 {
     public class RevistaRepositorio : BaseRepositorio
     {
-        public List<Revista> SelecionarRevistasDisponiveis()
+        public List<EntidadeBase> SelecionarRevistasDisponiveis()
         {
-            List<Revista> revistasDisponiveis = new List<Revista>();
+            List<EntidadeBase> revistasDisponiveis = new List<EntidadeBase>();
 
-            foreach (Revista revista in revistasDisponiveis)
+            foreach (var revista in revistasDisponiveis)
             {
-                if (revista.status == StatusRevista.Disponivel)
+                Revista revistaAtual = (Revista)revista;
+                if (revistaAtual.status == StatusRevista.Disponivel)
                     revistasDisponiveis.Add(revista);
             }
 

@@ -38,7 +38,7 @@ namespace ClubeDaLeitura.App.ModuloEmprestimo
             if (revista == null)
                 erros += "A revista é obrigatória!\n";
             else if (revista.status != StatusRevista.Disponivel)
-                erros += "A revista não está disponível para empréstimo!\n";
+                erros += "Não há revista disponível para empréstimo!\n";
 
             return erros;
         }

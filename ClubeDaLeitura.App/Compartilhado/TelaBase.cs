@@ -4,7 +4,7 @@ namespace ClubeDaLeitura.App.Compartilhado
 {
     public abstract class TelaBase
     {
-        private string nomeEntidade;
+        public string nomeEntidade;
         private BaseRepositorio repositorio;
 
         protected TelaBase(string nomeEntidade, BaseRepositorio repositorio)
@@ -60,7 +60,7 @@ namespace ClubeDaLeitura.App.Compartilhado
             }
         }
 
-        public void CadastrarRegistro()
+        public virtual void CadastrarRegistro()
         {
             Console.Clear();
             Console.WriteLine($"\nCadastro de {nomeEntidade}");
@@ -87,7 +87,9 @@ namespace ClubeDaLeitura.App.Compartilhado
                 return;
             }
             repositorio.CadastrarRegistro(novoRegistro);
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\n{nomeEntidade} cadastrado com sucesso!");
+            Console.ResetColor();
 
             Console.ReadLine();
         }

@@ -49,29 +49,6 @@ namespace ClubeDaLeitura.App.ModuloAmigo
             telefone = amigoAtualizado.telefone;
         }
 
-        public string ObterEmprestimo()
-        {
-            string dadosEmprestimos = "Empréstimos:\n";
-            foreach (var emprestimo in emprestimos)
-            {
-                Console.WriteLine(emprestimo.ToString());
-            }
-
-            return dadosEmprestimos;
-        }
-
-        public bool ExistemEmprestimosParaAmigo(int idAmigo)
-        {
-            foreach (Emprestimo emprestimo in emprestimos)
-            {
-                if (emprestimo.amigo != null && emprestimo.amigo.id == idAmigo)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public bool ValidarTelefone(string telefone)
         {
             var regex = new System.Text.RegularExpressions.Regex(@"^\(\d{2}\) \d{4,5}-\d{4}$");

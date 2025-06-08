@@ -22,7 +22,7 @@ namespace ClubeDaLeitura.App.ModuloTelas
         protected override EntidadeBase ObterDados()
         {
             Console.Write("Digite o título da revista: ");
-            string titulo = Console.ReadLine();
+            string titulo = Console.ReadLine().ToUpper();
 
             Console.Write("Digite o número da edição: ");
             int numeroEdicao = Convert.ToInt32(Console.ReadLine());
@@ -57,28 +57,65 @@ namespace ClubeDaLeitura.App.ModuloTelas
                 return null;
             }
 
-            if (VerificarRevistaExistente(titulo, numeroEdicao))
-            {
-                Console.WriteLine();
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Já existe uma revista com este título e número de edição cadastrado!");
-                Console.ResetColor();
-                Console.ReadLine();
-                return null;
-            }
-
             return new Revista(titulo, numeroEdicao, anoPublicacao, caixaSelecionada);
         }
 
-        public bool VerificarRevistaExistente(string titulo, int numeroEdicao)
+        public override void CadastrarRegistro()
         {
-            List<EntidadeBase> revistas = revistaRepositorio.SelecionarRegistros();
-            foreach (Revista revista in revistas)
+            Console.Clear();
+            Console.WriteLine($"Cadastro de {nomeEntidade}");
+            Console.WriteLine();
+
+            Revista novoRegistro = (Revista)ObterDados();
+
+            string erros = novoRegistro.Validar();
+
+            if (erros.Length > 0)
             {
-                if (revista.titulo == titulo && revista.numeroEdicao == numeroEdicao)
-                    return true;
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(erros);
+                Console.ResetColor();
+
+                Console.Write("\nDigite ENTER para continuar...");
+                Console.ReadLine();
+
+                CadastrarRegistro();
+                return;
             }
-            return false;
+
+            List<EntidadeBase> revistas = revistaRepositorio.SelecionarRegistros();
+
+            foreach (EntidadeBase entidade in revistas)
+            {
+                Revista revista = (Revista)entidade;
+
+                if (revista == null)
+                    continue;
+
+                if (revista.titulo == novoRegistro.titulo && revista.numeroEdicao == novoRegistro.numeroEdicao)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Uma revista com este título ou edição já foi cadastrada!");
+                    Console.ResetColor();
+
+                    Console.Write("\nDigite ENTER para continuar...");
+                    Console.ReadLine();
+
+                    CadastrarRegistro();
+                    return;
+                }
+            }
+
+            revistaRepositorio.CadastrarRegistro(novoRegistro);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n{nomeEntidade} cadastrado com sucesso!");
+            Console.ResetColor();
+
+            Console.Write("\nDigite ENTER para continuar...");
+            Console.ReadLine();
         }
 
         public override bool ListarRegistros()
@@ -96,7 +133,7 @@ namespace ClubeDaLeitura.App.ModuloTelas
                 return false;
             }
 
-            foreach (var revista in revistas)
+            foreach (Revista revista in revistas)
             {
                 Console.WriteLine(revista.ToString());
             }
@@ -130,7 +167,6 @@ namespace ClubeDaLeitura.App.ModuloTelas
                 return false;
             }
 
-            revistaRepositorio.ExcluirRegistro(idSelecionado);
             return true;
         }
     }

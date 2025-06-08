@@ -18,7 +18,7 @@ namespace ClubeDaLeitura.App.Compartilhado
         {
             TelaAmigo telaAmigo = new TelaAmigo(amigoRepositorio, emprestimoRepositorio);
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(emprestimoRepositorio, revistaRepositorio, amigoRepositorio);
-            TelaCaixa telaCaixa = new TelaCaixa(caixaRepositorio);
+            TelaCaixa telaCaixa = new TelaCaixa(caixaRepositorio, revistaRepositorio);
             TelaRevista telaRevista = new TelaRevista(revistaRepositorio, caixaRepositorio);
             while (true)
             {

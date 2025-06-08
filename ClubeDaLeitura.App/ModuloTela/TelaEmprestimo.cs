@@ -25,13 +25,6 @@ namespace ClubeDaLeitura.App.ModuloTela
             Console.WriteLine("\nSelecione um amigo:");
             List<EntidadeBase> amigos = amigoRepositorio.SelecionarRegistros();
 
-            if (amigos.Count == 0)
-            {
-                Console.WriteLine("Nenhum amigo cadastrado!");
-                Console.ReadLine();
-                return null;
-            }
-
             foreach (var amigo in amigos)
             {
                 Console.WriteLine(amigo.ToString());
@@ -49,34 +42,19 @@ namespace ClubeDaLeitura.App.ModuloTela
                 return null;
             }
 
-            if (amigoSelecionado.ExistemEmprestimosParaAmigo(idAmigo))
-            {
-                Console.WriteLine("Este amigo já possui um empréstimo ativo!");
-                Console.ReadLine();
-                return null;
-            }
+            Console.WriteLine("\nSelecione uma revista: ");
+            List<EntidadeBase> revistas = revistaRepositorio.SelecionarRevistasDisponiveis();
 
-            Console.WriteLine("\nSelecione uma revista disponível:");
-            List<Revista> revistasDisponiveis = revistaRepositorio.SelecionarRevistasDisponiveis();
-
-            if (revistasDisponiveis.Count < 0)
-            {
-                Console.WriteLine("Nenhuma revista disponível!");
-                Console.ReadLine();
-                return null;
-            }
-
-            foreach (var revista in revistasDisponiveis)
+            foreach (var revista in revistas)
             {
                 Console.WriteLine(revista.ToString());
             }
-
             Console.Write("\nDigite o ID da revista: ");
             int idRevista = Convert.ToInt32(Console.ReadLine());
 
             Revista revistaSelecionada = (Revista)revistaRepositorio.SelecionarRegistroPorId(idRevista);
 
-            if (revistaSelecionada == null || revistaSelecionada.status != StatusRevista.Disponivel)
+            if (revistaSelecionada == null)
             {
                 Console.WriteLine("Revista não disponível para empréstimo!");
                 Console.ReadLine();
@@ -87,6 +65,92 @@ namespace ClubeDaLeitura.App.ModuloTela
             DateTime dataEmprestimo = DateTime.Now;
 
             return new Emprestimo(amigoSelecionado, revistaSelecionada, dataEmprestimo, diasEmprestimo);
+        }
+
+        public override void CadastrarRegistro()
+        {
+            Console.Clear();
+            Console.WriteLine($"Cadastro de {nomeEntidade}");
+            Console.WriteLine();
+
+            Emprestimo novoRegistro = (Emprestimo)ObterDados();
+
+            string erros = novoRegistro.Validar();
+
+            if (erros.Length > 0)
+            {
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(erros);
+                Console.ResetColor();
+
+                Console.Write("\nDigite ENTER para continuar...");
+                Console.ReadLine();
+
+                CadastrarRegistro();
+                return;
+            }
+
+            var emprestimos = emprestimoRepositorio.SelecionarEmprestimosAtivos();
+
+            foreach (EntidadeBase entidade in emprestimos)
+            {
+                Emprestimo emprestimo = (Emprestimo)entidade;
+
+                if (emprestimo == null)
+                    continue;
+
+                if (novoRegistro.amigo.id == emprestimo.amigo.id)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("O amigo já esta com um empréstimo ativo!");
+                    Console.ResetColor();
+
+                    Console.Write("\nDigite ENTER para continuar...");
+                    Console.ReadLine();
+
+                    CadastrarRegistro();
+                    return;
+                }
+            }
+            Revista revista = novoRegistro.revista;
+            revista.Emprestar();
+            revistaRepositorio.EditarRegistro(revista.id, revista);
+
+            emprestimoRepositorio.CadastrarRegistro(novoRegistro);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n{nomeEntidade} cadastrado com sucesso!");
+            Console.ResetColor();
+
+            Console.Write("\nDigite ENTER para continuar...");
+            Console.ReadLine();
+        }
+
+        public bool VisualizarEmprestimosAtivos()
+        {
+            Console.Clear();
+            Console.WriteLine("Visualização de Empréstimos Ativos");
+            Console.WriteLine("-------------------------------------");
+
+            List<EntidadeBase> emprestimos = emprestimoRepositorio.SelecionarEmprestimosAtivos();
+
+            if (emprestimos.Count < 0)
+                Console.WriteLine("Nenhum empréstimo registrado.");
+            else
+                foreach (EntidadeBase entidade in emprestimos)
+                {
+                    Emprestimo emprestimo = (Emprestimo)entidade;
+                    if (emprestimo.status == StatusEmprestimo.Atrasado)
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(emprestimo.ToString());
+                    Console.ResetColor();
+                }
+
+            Console.ReadLine();
+
+            return true;
         }
 
         public override bool ListarRegistros()
@@ -112,6 +176,80 @@ namespace ClubeDaLeitura.App.ModuloTela
             Console.ReadLine();
 
             return true;
+        }
+
+        public override bool ExcluirRegistro()
+        {
+            Console.Clear();
+            Console.WriteLine($"Exclusão de caixa");
+            Console.WriteLine("-----------------------");
+
+            if (!ListarRegistros())
+                return false;
+
+            Console.Write($"\nDigite o ID do empréstimo a ser excluído: ");
+
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+            Emprestimo emprestimo = (Emprestimo)emprestimoRepositorio.SelecionarRegistroPorId(idSelecionado);
+
+            if (emprestimo == null)
+            {
+                Console.WriteLine("empréstimo não encontrado!");
+                Console.ReadLine();
+                return false;
+            }
+
+            return true;
+        }
+
+        public override void Menu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Gerenciamento de {nomeEntidade}");
+                Console.WriteLine("-----------------------------");
+                Console.WriteLine($"1. Cadastrar {nomeEntidade}");
+                Console.WriteLine($"2. Listar {nomeEntidade}");
+                Console.WriteLine($"3. Editar {nomeEntidade}");
+                Console.WriteLine($"4. Vizualizar empréstimos ativos");
+                Console.WriteLine($"5. Excluir {nomeEntidade}");
+                Console.WriteLine("0. Voltar");
+                Console.Write("Opção: ");
+
+                string opcao = Console.ReadLine();
+
+                switch (opcao)
+                {
+                    case "1":
+                        CadastrarRegistro();
+                        break;
+
+                    case "2":
+                        ListarRegistros();
+                        break;
+
+                    case "3":
+                        AtualizarRegistro();
+                        break;
+
+                    case "4":
+                        VisualizarEmprestimosAtivos();
+                        break;
+
+                    case "5":
+                        ExcluirRegistro();
+                        break;
+
+                    case "0":
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        Console.ReadLine();
+                        break;
+                }
+            }
         }
     }
 }

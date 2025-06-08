@@ -1,16 +1,20 @@
 ﻿using System;
 using ClubeDaLeitura.App.Compartilhado;
 using ClubeDaLeitura.App.ModuloAmigo;
+using ClubeDaLeitura.App.ModuloEmprestimo;
+using ClubeDaLeitura.App.ModuloRevista;
 
 namespace ClubeDaLeitura.App.ModuloCaixa
 {
     public class TelaCaixa : TelaBase
     {
         private CaixaRepositorio caixaRepositorio;
+        private RevistaRepositorio revistaRepositorio;
 
-        public TelaCaixa(CaixaRepositorio caixaRepositorio) : base("Caixas", caixaRepositorio)
+        public TelaCaixa(CaixaRepositorio caixaRepositorio, RevistaRepositorio revistaRepositorio) : base("Caixas", caixaRepositorio)
         {
             this.caixaRepositorio = caixaRepositorio;
+            this.revistaRepositorio = revistaRepositorio;
         }
 
         protected override Caixa ObterDados()
@@ -34,7 +38,7 @@ namespace ClubeDaLeitura.App.ModuloCaixa
         {
             List<EntidadeBase> caixas = caixaRepositorio.SelecionarRegistros();
 
-            if (caixas.Count == 0)
+            if (caixas.Count < 0)
             {
                 Console.WriteLine("Nenhuma caixa cadastrada!");
                 Console.ReadLine();
@@ -58,32 +62,46 @@ namespace ClubeDaLeitura.App.ModuloCaixa
         public override bool ExcluirRegistro()
         {
             Console.Clear();
-            Console.WriteLine($"Exclusão de caixa");
+            Console.WriteLine($"Exclusão de {nomeEntidade}");
             Console.WriteLine("-----------------------");
 
             if (!ListarRegistros())
                 return false;
 
-            Console.Write($"\nDigite o ID da caixa a ser excluída: ");
+            Console.Write($"\nDigite o ID do {nomeEntidade} a ser excluído: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Caixa caixa = (Caixa)caixaRepositorio.SelecionarRegistroPorId(idSelecionado);
+            List<EntidadeBase> revistas = revistaRepositorio.SelecionarRegistros();
 
-            if (caixa == null)
+            foreach (var entidade in revistas)
             {
-                Console.WriteLine("Caixa não encontrada!");
-                Console.ReadLine();
-                return false;
-            }
+                Revista revista = (Revista)entidade;
 
-            if (caixa.ExistemEmprestimosParaCaixa(idSelecionado))
-            {
-                Console.WriteLine("Não é possível excluir uma caixa com empréstimos vinculados!");
-                Console.ReadLine();
-                return false;
+                if (revista == null)
+                    continue;
+
+                if (revista.caixa != null && revista.caixa.id == idSelecionado)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("A Caixa não pode ser excluída enquanto houver pendências!");
+                    Console.ResetColor();
+
+                    Console.Write("\nDigite ENTER para continuar...");
+                    Console.ReadLine();
+
+                    return false;
+                }
             }
 
             caixaRepositorio.ExcluirRegistro(idSelecionado);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n{nomeEntidade} excluída com sucesso!");
+            Console.ResetColor();
+
+            Console.Write("\nDigite ENTER para continuar...");
+            Console.ReadLine();
+
             return true;
         }
     }

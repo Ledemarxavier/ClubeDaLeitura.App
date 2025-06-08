@@ -82,7 +82,7 @@ namespace ClubeDaLeitura.App.ModuloCaixa
                 }
             }
 
-            revistaRepositorio.CadastrarRegistro(novoRegistro);
+            caixaRepositorio.CadastrarRegistro(novoRegistro);
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\n{nomeEntidade} cadastrado com sucesso!");

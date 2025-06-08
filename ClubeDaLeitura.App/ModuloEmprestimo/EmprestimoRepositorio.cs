@@ -22,4 +22,22 @@ public class EmprestimoRepositorio : BaseRepositorio
 
         return emprestimosAtivos;
     }
+
+    public List<EntidadeBase> SelecionarEmprestimosConcluidos()
+    {
+        List<EntidadeBase> emprestimosConcluidos = new List<EntidadeBase>();
+
+        foreach (var registro in registros)
+        {
+            Emprestimo emprestimoAtual = (Emprestimo)registro;
+
+            if (emprestimoAtual == null)
+                continue;
+
+            if (emprestimoAtual.status == StatusEmprestimo.Concluido)
+                emprestimosConcluidos.Add(emprestimoAtual);
+        }
+
+        return emprestimosConcluidos;
+    }
 }

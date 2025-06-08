@@ -5,7 +5,7 @@ namespace ClubeDaLeitura.App.Compartilhado
     public abstract class TelaBase
     {
         public string nomeEntidade;
-        private BaseRepositorio repositorio;
+        public BaseRepositorio repositorio;
 
         protected TelaBase(string nomeEntidade, BaseRepositorio repositorio)
         {

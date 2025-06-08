@@ -154,14 +154,17 @@ namespace ClubeDaLeitura.App.ModuloTelas
             Console.Write($"\nDigite o ID da revista a ser excluída: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Revista revista = (Revista)revistaRepositorio.SelecionarRegistroPorId(idSelecionado);
-
+            EntidadeBase revista = revistaRepositorio.SelecionarRegistroPorId(idSelecionado);
+            Revista revistaAtual = (Revista)revista;
             if (revista == null)
                 return false;
 
-            if (revista.status != StatusRevista.Disponivel)
+            if (revistaAtual.status != StatusRevista.Disponivel)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Não é possível excluir uma revista que está emprestada ou reservada!");
+                Console.ResetColor();
+                Console.Write("\nDigite ENTER para continuar...");
                 Console.ReadLine();
 
                 return false;

@@ -54,13 +54,6 @@ namespace ClubeDaLeitura.App.ModuloTela
 
             Revista revistaSelecionada = (Revista)revistaRepositorio.SelecionarRegistroPorId(idRevista);
 
-            if (revistaSelecionada == null)
-            {
-                Console.WriteLine("Revista não disponível para empréstimo!");
-                Console.ReadLine();
-                return null;
-            }
-
             int diasEmprestimo = revistaSelecionada.caixa.diasEmprestimo;
             DateTime dataEmprestimo = DateTime.Now;
 

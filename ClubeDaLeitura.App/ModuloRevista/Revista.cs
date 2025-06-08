@@ -78,7 +78,7 @@ namespace ClubeDaLeitura.App.ModuloRevista
 
         public override string ToString()
         {
-            return $"ID: {id} | Título: {titulo} | Edição: {numeroEdicao} | Ano: {anoPublicacao} | Status: {status} | Caixa: {caixa.etiqueta}";
+            return $"ID: {id} | Título: {titulo} | Edição: {numeroEdicao} | Ano: {anoPublicacao} | Status: {status} | Caixa: {caixa.etiqueta}\n";
         }
     }
 }

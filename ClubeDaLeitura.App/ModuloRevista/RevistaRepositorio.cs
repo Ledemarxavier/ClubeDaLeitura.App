@@ -10,7 +10,7 @@ namespace ClubeDaLeitura.App.ModuloRevista
         {
             List<EntidadeBase> revistasDisponiveis = new List<EntidadeBase>();
 
-            foreach (var revista in revistasDisponiveis)
+            foreach (var revista in registros)
             {
                 Revista revistaAtual = (Revista)revista;
                 if (revistaAtual.status == StatusRevista.Disponivel)

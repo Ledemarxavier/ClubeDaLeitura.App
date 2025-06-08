@@ -20,7 +20,7 @@ namespace ClubeDaLeitura.App.ModuloCaixa
         protected override Caixa ObterDados()
         {
             Console.Write("Digite a etiqueta da caixa: ");
-            string etiqueta = Console.ReadLine();
+            string etiqueta = Console.ReadLine().ToUpper();
 
             Console.Write("Digite a cor da caixa: ");
             string cor = Console.ReadLine();
@@ -32,6 +32,64 @@ namespace ClubeDaLeitura.App.ModuloCaixa
                 diasEmprestimo = 7;
 
             return new Caixa(etiqueta, cor, diasEmprestimo);
+        }
+
+        public override void CadastrarRegistro()
+        {
+            Console.Clear();
+            Console.WriteLine($"Cadastro de {nomeEntidade}");
+            Console.WriteLine();
+
+            Caixa novoRegistro = (Caixa)ObterDados();
+
+            string erros = novoRegistro.Validar();
+
+            if (erros.Length > 0)
+            {
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(erros);
+                Console.ResetColor();
+
+                Console.Write("\nDigite ENTER para continuar...");
+                Console.ReadLine();
+
+                CadastrarRegistro();
+                return;
+            }
+
+            List<EntidadeBase> caixas = revistaRepositorio.SelecionarRegistros();
+
+            foreach (EntidadeBase entidade in caixas)
+            {
+                Caixa caixa = (Caixa)entidade;
+
+                if (caixa == null)
+                    continue;
+
+                if (caixa.etiqueta == novoRegistro.etiqueta)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Uma Caixa com esta etiqueta já foi cadastrada!");
+                    Console.ResetColor();
+
+                    Console.Write("\nDigite ENTER para continuar...");
+                    Console.ReadLine();
+
+                    CadastrarRegistro();
+                    return;
+                }
+            }
+
+            revistaRepositorio.CadastrarRegistro(novoRegistro);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n{nomeEntidade} cadastrado com sucesso!");
+            Console.ResetColor();
+
+            Console.Write("\nDigite ENTER para continuar...");
+            Console.ReadLine();
         }
 
         public override bool ListarRegistros()
@@ -68,7 +126,7 @@ namespace ClubeDaLeitura.App.ModuloCaixa
             if (!ListarRegistros())
                 return false;
 
-            Console.Write($"\nDigite o ID do {nomeEntidade} a ser excluído: ");
+            Console.Write($"\nDigite o ID do {nomeEntidade} a ser excluída: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
             List<EntidadeBase> revistas = revistaRepositorio.SelecionarRegistros();
